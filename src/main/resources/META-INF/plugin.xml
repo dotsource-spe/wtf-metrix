@@ -1,11 +1,10 @@
 <idea-plugin>
     <id>de.dotsource.wtf.wtf-metrix</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <name>GIT WTF for IntelliJ</name>
+    <vendor email="info@dotsource.de" url="https://www.dotsource.de">dotSource GmbH</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    Code-Quality is measured and displayed in WTF per LOC.
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -20,5 +19,9 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="de.dotsource.wtf.intellij.action.WtfAction" class="de.dotsource.wtf.intellij.action.WtfAction"
+                text="WTF Action" description="Call WTF for a block of code.">
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="JspActions"/>
+        </action>
     </actions>
 </idea-plugin>
