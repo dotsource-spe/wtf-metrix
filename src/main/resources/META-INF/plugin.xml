@@ -21,7 +21,7 @@
         <!-- Add your actions here -->
         <action id="de.dotsource.wtf.intellij.action.WtfAction" class="de.dotsource.wtf.intellij.action.WtfAction"
                 text="WTF Action" description="Call WTF for a block of code.">
-            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="JspActions"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last" />
         </action>
     </actions>
 </idea-plugin>
