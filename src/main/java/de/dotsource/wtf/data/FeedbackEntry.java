@@ -1,6 +1,7 @@
 package de.dotsource.wtf.data;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public class FeedbackEntry {
 
@@ -8,7 +9,7 @@ public class FeedbackEntry {
     private String Path;
     private String Comment;
     private String UserName;
-    private LocalDateTime TimeStamp;
+    private OffsetDateTime TimeStamp;
     private String Repository;
     private String Revision;
 
@@ -44,11 +45,11 @@ public class FeedbackEntry {
         UserName = userName;
     }
 
-    public LocalDateTime getTimeStamp() {
+    public OffsetDateTime getTimeStamp() {
         return TimeStamp;
     }
 
-    public void setTimeStamp(LocalDateTime timeStamp) {
+    public void setTimeStamp(OffsetDateTime timeStamp) {
         TimeStamp = timeStamp;
     }
 

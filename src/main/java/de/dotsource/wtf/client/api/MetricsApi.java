@@ -57,7 +57,7 @@ public class MetricsApi {
      * @return List&lt;Metrics&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<Metrics> findPetsByTags(String repo, String filePath, String revision) throws RestClientException {
+    public List<Metrics> getMetrics(String repo, String filePath, String revision) throws RestClientException {
         Object postBody = null;
         
         // verify the required parameter 'repo' is set

@@ -497,41 +497,48 @@ public class ApiClient {
      */
     public <T> T invokeAPI(String path, HttpMethod method, MultiValueMap<String, String> queryParams, Object body, HttpHeaders headerParams, MultiValueMap<String, Object> formParams, List<MediaType> accept, MediaType contentType, String[] authNames, ParameterizedTypeReference<T> returnType) throws RestClientException {
         updateParamsForAuth(authNames, queryParams, headerParams);
-        
+
         final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(basePath).path(path);
         if (queryParams != null) {
             builder.queryParams(queryParams);
         }
-        
+
         final BodyBuilder requestBuilder = RequestEntity.method(method, builder.build().toUri());
-        if(accept != null) {
+        if (accept != null) {
             requestBuilder.accept(accept.toArray(new MediaType[accept.size()]));
         }
-        if(contentType != null) {
+        if (contentType != null) {
             requestBuilder.contentType(contentType);
         }
-        
+
         addHeadersToRequest(headerParams, requestBuilder);
         addHeadersToRequest(defaultHeaders, requestBuilder);
-        
+
         RequestEntity<Object> requestEntity = requestBuilder.body(selectBody(body, formParams, contentType));
 
-        ResponseEntity<T> responseEntity = restTemplate.exchange(requestEntity, returnType);
-        
-        statusCode = responseEntity.getStatusCode();
-        responseHeaders = responseEntity.getHeaders();
+        try {
+            ResponseEntity<T> responseEntity = restTemplate.exchange(requestEntity, returnType);
+            System.out.println(responseEntity.getBody());
 
-        if (responseEntity.getStatusCode() == HttpStatus.NO_CONTENT) {
-            return null;
-        } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            if (returnType == null) {
+            statusCode = responseEntity.getStatusCode();
+            responseHeaders = responseEntity.getHeaders();
+
+            if (responseEntity.getStatusCode() == HttpStatus.NO_CONTENT) {
                 return null;
+            } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                if (returnType == null) {
+                    return null;
+                }
+                return responseEntity.getBody();
+            } else {
+                // The error handler built into the RestTemplate should handle 400 and 500 series errors.
+                throw new RestClientException("API returned " + statusCode + " and it wasn't handled by the RestTemplate error handler");
             }
-            return responseEntity.getBody();
-        } else {
-            // The error handler built into the RestTemplate should handle 400 and 500 series errors.
-            throw new RestClientException("API returned " + statusCode + " and it wasn't handled by the RestTemplate error handler");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
+        return null;
     }
     
     /**
