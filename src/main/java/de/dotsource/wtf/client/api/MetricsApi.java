@@ -2,6 +2,7 @@ package de.dotsource.wtf.client.api;
 
 import de.dotsource.wtf.client.invoker.ApiClient;
 
+import de.dotsource.wtf.client.model.Line;
 import de.dotsource.wtf.client.model.Metrics;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class MetricsApi {
      * @return List&lt;Metrics&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<Metrics> getMetrics(String repo, String filePath, String revision) throws RestClientException {
+    public Map<Integer, Line> getMetrics(String repo, String filePath, String revision) throws RestClientException {
         Object postBody = null;
         
         // verify the required parameter 'repo' is set
@@ -86,7 +87,7 @@ public class MetricsApi {
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "revision", revision));
 
         final String[] accepts = { 
-            "application/xml", "application/json"
+            "application/json"
         };
         final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
         final String[] contentTypes = { };
@@ -94,7 +95,7 @@ public class MetricsApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<List<Metrics>> returnType = new ParameterizedTypeReference<List<Metrics>>() {};
+        ParameterizedTypeReference<Map<Integer, Line>> returnType = new ParameterizedTypeReference<Map<Integer, Line>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

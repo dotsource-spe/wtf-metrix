@@ -3,11 +3,19 @@ package de.dotsource.wtf.service.impl;
 import de.dotsource.wtf.client.api.FeedbackApi;
 import de.dotsource.wtf.client.api.MetricsApi;
 import de.dotsource.wtf.client.model.Feedback;
+import de.dotsource.wtf.client.model.Line;
 import de.dotsource.wtf.client.model.Metrics;
 import de.dotsource.wtf.data.FeedbackEntry;
 import de.dotsource.wtf.data.FileMetricEntry;
+import de.dotsource.wtf.data.LineFeedbackEntry;
 import de.dotsource.wtf.service.FeedbackService;
 import com.intellij.openapi.project.Project;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MetricServerFeedbackService implements FeedbackService {
     private FeedbackApi feedbackApi;
@@ -36,6 +44,7 @@ public class MetricServerFeedbackService implements FeedbackService {
         feedback.setRevision(entry.getRevision());
         feedback.setUsername(entry.getUserName());
         feedback.setTimestamp(entry.getTimeStamp());
+        feedback.setRating(Feedback.RatingEnum.THUMBSDOWN);
 
         // invoke REST method to post feedback
         feedbackApi.postFeedback(feedback);
@@ -49,23 +58,25 @@ public class MetricServerFeedbackService implements FeedbackService {
 
     /**
      * Create REST client and invoke GET method.
-     *
-     * @param Path
-     * @return
      */
     @Override
-    public FileMetricEntry getFeedbackForFile(String Path) {
-        // TODO: invoke REST method to get metrics
-        //metricsApi.getMetrics(...);
+    public FileMetricEntry getFeedbackForFile(String path, String repository, String revision) {
+        final Map<Integer, Line> metrics = metricsApi.getMetrics(repository, path, revision);
 
-        Metrics metrics = new Metrics();
+        final Map<Integer, LineFeedbackEntry> tmp = (metrics != null ? metrics.entrySet().stream() : Stream.<Map.Entry<Integer, Line>>empty())
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toMap(Line::getLineno, this::convertToLineEntry));
 
-        // create metrics entry from values returned from the REST client
-        FileMetricEntry fileMetricEntry = new FileMetricEntry();
-        //fileMetricEntry.put()
+        FileMetricEntry fme = new FileMetricEntry();
+        fme.putAll(tmp);
+        return fme;
+    }
 
-        // TODO: process metrics
+    private LineFeedbackEntry convertToLineEntry(Line line) {
+        return new LineFeedbackEntry(line.getAverage(), createAdditionalInformationString(line));
+    }
 
-        return null;
+    private String createAdditionalInformationString(Line line) {
+        return String.format("Thumbsup: %s, Thumbsdown: %s", line.getThumbsup(), line.getThumbsdown());
     }
 }

@@ -57,7 +57,7 @@ public class ReadGitResultAction extends ReadAction<AnActionEvent> {
 
         for (int i = lineStart; i <= lineEnd; i++) {
             FeedbackEntry entry = new FeedbackEntry();
-            entry.setLine(i + 1);
+            entry.setLine(i);
             entry.setPath(path);
 
             entry.setComment(StringUtils.EMPTY);

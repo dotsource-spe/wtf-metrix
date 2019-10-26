@@ -17,7 +17,7 @@ public class MockFeedbackService implements FeedbackService {
     }
 
     @Override
-    public FileMetricEntry getFeedbackForFile(String Path) {
+    public FileMetricEntry getFeedbackForFile(String path, String repository, String revision) {
         FileMetricEntry result = new FileMetricEntry();
         result.put(1, new LineFeedbackEntry(5.0, "Who fucked this up?"));
         return result;
