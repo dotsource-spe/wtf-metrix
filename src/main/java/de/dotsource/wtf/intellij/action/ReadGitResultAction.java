@@ -4,12 +4,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
+import com.intellij.openapi.application.RunResult;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.dotsource.wtf.data.FeedbackEntry;
-import de.dotsource.wtf.data.GitResult;
 import de.dotsource.wtf.service.FeedbackService;
 import git4idea.commands.Git;
 import git4idea.repo.GitRepository;
@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,8 @@ public class ReadGitResultAction extends ReadAction<AnActionEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(ReadGitResultAction.class);
 
     @Override
-    public void run(Result<AnActionEvent> result) {
-        GitResult result1 = (GitResult) result;
-        AnActionEvent event = result1.getResult();
+    public void run(@Nonnull Result<AnActionEvent> result) {
+        AnActionEvent event = ((RunResult<AnActionEvent>)result).getResultObject();
 
         List<FeedbackEntry> wtfList = new ArrayList<FeedbackEntry>();
         VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
@@ -59,6 +59,7 @@ public class ReadGitResultAction extends ReadAction<AnActionEvent> {
 
             wtfList.add(entry);
         }
+
         FeedbackService feedbackService = ServiceManager.getService(FeedbackService.class);
         for (FeedbackEntry entry : wtfList)
         feedbackService.storeFeedback(entry);
