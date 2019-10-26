@@ -6,6 +6,7 @@ import de.dotsource.wtf.service.MetricServerFeedbackService;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import static org.junit.Assert.*;
 
@@ -23,7 +24,7 @@ public class MetricServerFeedbackServiceTest {
         fe.setLine(10);
         fe.setRepository("/git");
         fe.setRevision("12345678 abcdefg");
-        fe.setTimeStamp(LocalDateTime.now());
+        fe.setTimeStamp(OffsetDateTime.now());
         service.storeFeedback(fe);
 
         //assertNotNull(service.storeFeedback(fe));

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.vm.ci.meta.Local;
+
 
 import java.time.OffsetDateTime;
 
@@ -75,7 +75,7 @@ public class Feedback {
   private RatingEnum rating = null;
 
   @JsonProperty("timestamp")
-  private LocalDateTime timestamp = null;
+  private OffsetDateTime timestamp = null;
 
   @JsonProperty("line")
   private Integer line = null;
@@ -149,7 +149,7 @@ public class Feedback {
     this.rating = rating;
   }
 
-  public Feedback timestamp(LocalDateTime timestamp) {
+  public Feedback timestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -159,11 +159,11 @@ public class Feedback {
    * @return timestamp
   **/
   @ApiModelProperty(value = "")
-  public LocalDateTime getTimestamp() {
+  public OffsetDateTime getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(LocalDateTime timestamp) {
+  public void setTimestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
   }
 
@@ -306,18 +306,18 @@ public class Feedback {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Feedback {\n");
+    sb.append("{\n");
     
-    sb.append("    revision: ").append(toIndentedString(revision)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    rating: ").append(toIndentedString(rating)).append("\n");
-    sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
-    sb.append("    line: ").append(toIndentedString(line)).append("\n");
-    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
-    sb.append("    method: ").append(toIndentedString(method)).append("\n");
-    sb.append("    propertyClass: ").append(toIndentedString(propertyClass)).append("\n");
-    sb.append("    repository: ").append(toIndentedString(repository)).append("\n");
-    sb.append("    path: ").append(toIndentedString(path)).append("\n");
+    sb.append("\"revision\": \"").append(toIndentedString(revision)).append("\",\n");
+    sb.append("\"username\": \"").append(toIndentedString(username)).append("\",\n");
+    sb.append("\"rating\": \"").append(toIndentedString(rating)).append("\",\n");
+    sb.append("\"timestamp\": \"").append(toIndentedString(timestamp)).append("\",\n");
+    sb.append("\"line\": ").append(toIndentedString(line)).append(",\n");
+    sb.append("\"comment\": \"").append(toIndentedString(comment)).append("\",\n");
+    sb.append("\"method\": \"").append(toIndentedString(method)).append("\",\n");
+    sb.append("\"propertyClass\": \"").append(toIndentedString(propertyClass)).append("\",\n");
+    sb.append("\"repository\": \"").append(toIndentedString(repository)).append("\",\n");
+    sb.append("\"path\": \"").append(toIndentedString(path)).append("\"\n");
     sb.append("}");
     return sb.toString();
   }
