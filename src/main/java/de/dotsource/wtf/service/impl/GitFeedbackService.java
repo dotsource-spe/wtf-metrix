@@ -16,7 +16,7 @@ public class GitFeedbackService implements FeedbackService {
     }
 
     @Override
-    public FileMetricEntry getFeedbackForFile(String Path) {
+    public FileMetricEntry getFeedbackForFile(String path, String repository, String revision) {
         return null;
     }
 }

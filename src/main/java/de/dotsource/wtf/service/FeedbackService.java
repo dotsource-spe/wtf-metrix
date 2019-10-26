@@ -13,5 +13,5 @@ public interface FeedbackService {
 
     FileMetricEntry storeFeedback(FeedbackEntry entry);
 
-    FileMetricEntry getFeedbackForFile(String Path);
+    FileMetricEntry getFeedbackForFile(String path, String repository, String revision);
 }
