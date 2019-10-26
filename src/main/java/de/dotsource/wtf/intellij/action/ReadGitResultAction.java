@@ -26,7 +26,7 @@ public class ReadGitResultAction extends ReadAction<AnActionEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(ReadGitResultAction.class);
 
     @Override
-    public void run(Result<AnActionEvent> result) throws Throwable {
+    public void run(Result<AnActionEvent> result) {
         GitResult result1 = (GitResult) result;
         AnActionEvent event = result1.getResult();
 

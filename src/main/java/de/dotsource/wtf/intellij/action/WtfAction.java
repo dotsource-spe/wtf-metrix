@@ -37,11 +37,8 @@ public class WtfAction extends AnAction {
         GitResult gitResult = new GitResult();
         gitResult.setResult(actionEvent);
 
-        try {
-            action.run(gitResult);
-        } catch (Throwable e){
-            LOG.error(e.getMessage(),e);
-        }
+
+        action.run(gitResult);
 
     }
 
