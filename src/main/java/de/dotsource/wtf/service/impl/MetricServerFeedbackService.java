@@ -1,17 +1,22 @@
-package de.dotsource.wtf.service;
+package de.dotsource.wtf.service.impl;
 
 import de.dotsource.wtf.client.api.FeedbackApi;
 import de.dotsource.wtf.client.api.MetricsApi;
-import de.dotsource.wtf.client.invoker.ApiClient;
 import de.dotsource.wtf.client.model.Feedback;
 import de.dotsource.wtf.client.model.Metrics;
 import de.dotsource.wtf.data.FeedbackEntry;
 import de.dotsource.wtf.data.FileMetricEntry;
-
-import java.time.LocalDateTime;
-
+import de.dotsource.wtf.service.FeedbackService;
+import com.intellij.openapi.project.Project;
 
 public class MetricServerFeedbackService implements FeedbackService {
+    private FeedbackApi feedbackApi;
+    private MetricsApi metricsApi;
+
+    public MetricServerFeedbackService(Project project) {
+        feedbackApi = new FeedbackApi();
+        metricsApi = new MetricsApi();
+    }
 
     /**
      * Create REST client and invoke POST method.
@@ -21,9 +26,6 @@ public class MetricServerFeedbackService implements FeedbackService {
      */
     @Override
     public FileMetricEntry storeFeedback(FeedbackEntry entry) {
-
-        // create REST client
-        FeedbackApi feedbackApi = new FeedbackApi(new ApiClient());
 
         // create feedback object from entry
         Feedback feedback = new Feedback();
@@ -53,10 +55,6 @@ public class MetricServerFeedbackService implements FeedbackService {
      */
     @Override
     public FileMetricEntry getFeedbackForFile(String Path) {
-
-        // create client
-        MetricsApi metricsApi = new MetricsApi();
-
         // TODO: invoke REST method to get metrics
         //metricsApi.getMetrics(...);
 

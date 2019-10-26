@@ -15,8 +15,8 @@
     <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-
-<!--        <moduleConfigurable id="GitWtf" displayName="Git WTF" instance="org.sonarlint.intellij.config.module.SonarLintModuleConfigurable"/>-->
+        <projectService serviceInterface="de.dotsource.wtf.service.FeedbackService"
+                        serviceImplementation="de.dotsource.wtf.service.impl.MockFeedbackService"/>
     </extensions>
 
     <application-components>
