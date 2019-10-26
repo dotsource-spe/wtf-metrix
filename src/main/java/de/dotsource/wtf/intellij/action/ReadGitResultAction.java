@@ -53,11 +53,11 @@ public class ReadGitResultAction extends ReadAction<AnActionEvent> {
         GitRepositoryManager gitRepositoryManager = GitRepositoryManager.getInstance(project);
         GitRepository gitRepository = gitRepositoryManager.getRepositories().get(0);
         String revision = gitRepository.getInfo().getCurrentRevision();
-        GitCommandResult commandResult = git.config(gitRepository,"user.email");
-        String user = commandResult.getOutputAsJoinedString();
+        String user = git.config(gitRepository,"user.email").getOutputAsJoinedString();
 
-        String path = file.getCanonicalPath();
-        String repository = project.getBasePath();
+        String path = file.getPath();
+        String repository = git.config(gitRepository,"remote.origin.url").getOutputAsJoinedString();
+
 
         Caret caret = event.getData(PlatformDataKeys.CARET);
         int lineStart = caret.getSelectionStartPosition().line;
