@@ -1,18 +1,12 @@
-import com.sun.jna.platform.win32.Sspi;
 import de.dotsource.wtf.data.FeedbackEntry;
-import de.dotsource.wtf.data.FileMetricEntry;
-import de.dotsource.wtf.service.FeedbackService;
-import de.dotsource.wtf.service.MetricServerFeedbackService;
+import de.dotsource.wtf.service.impl.MetricServerFeedbackService;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-
-import static org.junit.Assert.*;
 
 public class MetricServerFeedbackServiceTest {
 
-    private MetricServerFeedbackService service = new MetricServerFeedbackService();
+    private MetricServerFeedbackService service = new MetricServerFeedbackService(null);
 
     @Test
     public void testStoreFeedback()

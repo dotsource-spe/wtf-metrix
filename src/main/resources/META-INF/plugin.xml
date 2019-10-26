@@ -1,4 +1,5 @@
 <idea-plugin>
+
     <id>de.dotsource.wtf.intellij</id>
     <name>GIT WTF for IntelliJ</name>
     <vendor email="info@dotsource.de" url="https://www.dotsource.de">dotSource GmbH</vendor>
@@ -11,10 +12,11 @@
          on how to target different products -->
     <!-- uncomment to enable plugin in all products-->
     <depends>com.intellij.modules.lang</depends>
-    <!---->
+    <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-<!--        <moduleConfigurable id="GitWtf" displayName="Git WTF" instance="org.sonarlint.intellij.config.module.SonarLintModuleConfigurable"/>-->
+        <projectService serviceInterface="de.dotsource.wtf.service.FeedbackService"
+                        serviceImplementation="de.dotsource.wtf.service.impl.MockFeedbackService"/>
     </extensions>
 
     <application-components>

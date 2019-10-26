@@ -25,10 +25,10 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    pluginName 'pluginname'
-    plugins = ['Git4Idea', "Github" ]
+    plugins = ['Git4Idea', 'Github']
     version '2019.2.3'
 }
+
 patchPluginXml {
     changeNotes """
       Add change notes here.<br>

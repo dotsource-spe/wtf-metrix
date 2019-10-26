@@ -18,6 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
+/**
+ * Plugin-Initialization.
+ */
 public class WtfApplication implements BaseComponent {
     private static final Logger LOG = LoggerFactory.getLogger(WtfApplication.class);
     private IdeaPluginDescriptor plugin;
