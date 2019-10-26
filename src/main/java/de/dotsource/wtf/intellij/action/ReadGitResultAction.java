@@ -4,14 +4,15 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.application.Result;
-import com.intellij.openapi.application.RunResult;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.dotsource.wtf.data.FeedbackEntry;
+import de.dotsource.wtf.data.FileMetricEntry;
 import de.dotsource.wtf.service.FeedbackService;
-import git4idea.commands.Git;
+import git4idea.config.GitConfigUtil;
+import git4idea.repo.GitRemote;
 import git4idea.repo.GitRepository;
 import git4idea.repo.GitRepositoryManager;
 import org.apache.commons.lang.StringUtils;
@@ -25,27 +26,35 @@ import java.util.List;
 
 public class ReadGitResultAction extends ReadAction<AnActionEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(ReadGitResultAction.class);
+    private final AnActionEvent event;
+    private final int lineStart;
+    private final int lineEnd;
+    private final VirtualFile file;
+    private final Project project;
+
+    public ReadGitResultAction(AnActionEvent event) {
+        this.event = event;
+        file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
+        project = event.getData(PlatformDataKeys.PROJECT);
+
+        Caret caret = event.getData(PlatformDataKeys.CARET);
+        this.lineStart = caret.getSelectionStartPosition().line;
+        this.lineEnd = caret.getSelectionEndPosition().line;
+    }
 
     @Override
-    public void run(@Nonnull Result<AnActionEvent> result) {
-        AnActionEvent event = ((RunResult<AnActionEvent>)result).getResultObject();
+    public void run(@Nonnull Result<AnActionEvent> result) throws VcsException {
 
-        List<FeedbackEntry> wtfList = new ArrayList<FeedbackEntry>();
-        VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
-        Project project = event.getData(PlatformDataKeys.PROJECT);
-        Git git = Git.getInstance();
+        List<FeedbackEntry> wtfList = new ArrayList<>();
+
         GitRepositoryManager gitRepositoryManager = GitRepositoryManager.getInstance(project);
         GitRepository gitRepository = gitRepositoryManager.getRepositories().get(0);
         String revision = gitRepository.getInfo().getCurrentRevision();
-        String user = git.config(gitRepository,"user.email").getOutputAsJoinedString();
+        String repository = gitRepository.getRemotes().stream().findFirst().map(GitRemote::getFirstUrl).orElse("WTFRepo");
+        String user = GitConfigUtil.getValue(project, gitRepository.getRoot(), "user.email");
 
         String path = file.getPath();
-        String repository = git.config(gitRepository,"remote.origin.url").getOutputAsJoinedString();
 
-
-        Caret caret = event.getData(PlatformDataKeys.CARET);
-        int lineStart = caret.getSelectionStartPosition().line;
-        int lineEnd = caret.getSelectionEndPosition().line;
         for (int i = lineStart; i <= lineEnd; i++) {
             FeedbackEntry entry = new FeedbackEntry();
             entry.setLine(i + 1);
@@ -60,8 +69,10 @@ public class ReadGitResultAction extends ReadAction<AnActionEvent> {
             wtfList.add(entry);
         }
 
-        FeedbackService feedbackService = ServiceManager.getService(FeedbackService.class);
-        for (FeedbackEntry entry : wtfList)
-        feedbackService.storeFeedback(entry);
+        FeedbackService feedbackService = FeedbackService.getInstance(project);
+        for (FeedbackEntry entry : wtfList) {
+            feedbackService.storeFeedback(entry);
+        }
+        result.setResult(event);
     }
 }
